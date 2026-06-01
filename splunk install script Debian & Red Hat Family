@@ -1,0 +1,91 @@
+splunk installation 
+Download link 
+wget -O splunk-10.4.0-f798d4d49089.x86_64.rpm "https://download.splunk.com/products/splunk/releases/10.4.0/linux/splunk-10.4.0-f798d4d49089.x86_64.rpm"
+
+wget -O splunk-9.3.1-0b8d769cb912.x86_64.rpm "https://download.splunk.com/products/splunk/releases/9.3.1/linux/splunk-9.3.1-0b8d769cb912.x86_64.rpm"
+Install Splunk
+sudo apt install splunk-9.3.1-0b8d769cb912.x86_64.rpm -y 
+
+ cd /opt/splunk/bin/
+
+sudo ./splunk start --accept-license --answer-yes
+
+./splunk enable boot-start
+
+
+
+splunk forwarder installation
+
+wget -O splunkforwarder-10.4.0-f798d4d49089.x86_64.rpm "https://download.splunk.com/products/universalforwarder/releases/10.4.0/linux/splunkforwarder-10.4.0-f798d4d49089.x86_64.rpm"
+
+wget -O splunkforwarder-9.3.1-0b8d769cb912.x86_64.rpm "https://download.splunk.com/products/universalforwarder/releases/9.3.1/linux/splunkforwarder-9.3.1-0b8d769cb912.x86_64.rpm"
+
+
+sudo yum install splunkforwarder-9.3.1-0b8d769cb912.x86_64.rpm -y
+
+
+cd /opt/splunkforwarder/bin/
+
+sudo ./splunk start --accept-license --answer-yes
+
+./splunk add forward-server <your splunk public-ip>:9997
+
+
+./splunk restart
+
+
+
+according to ubuntu
+==================
+first go inside tmp for future prepose
+cd /tmp 
+to download splunk
+wget -O splunk-10.4.0-f798d4d49089-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.4.0/linux/splunk-10.4.0-f798d4d49089-linux-amd64.deb"
+install splunk
+sudo dpkg -i splunk-10.4.0-f798d4d49089-linux-amd64.deb
+
+sudo chown -R splunk:splunk /opt/splunk
+sudo -u splunk /opt/splunk/bin/splunk start --accept-license
+
+
+sudo /opt/splunk/bin/splunk enable boot-start --accept-license --answer-yes --run-as-root
+
+
+   wget -O splunk-10.4.0-f798d4d49089-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.4.0/linux/splunk-10.4.0-f798d4d49089-linux-amd64.deb"
+     sudo dpkg -i splunk.deb
+    ls
+   sudo dpkg -i splunk-10.4.0-f798d4d49089-linux-amd64.deb
+   sudo apt --fix-broken install -y
+   ls -l /opt/splunk/bin/splunk
+   chmode u+w /opt/splunk/bin/splunk
+   chmod u+w /opt/splunk/bin/splunk
+   ls -l /opt/splunk/bin/splunk
+   /opt/splunk/bin/splunk version
+   sudo /opt/splunk/bin/splunk start --accept-license
+   sudo chown -R splunk:splunk /opt/splunk
+   sudo -u splunk /opt/splunk/bin/splunk start --accept-license
+   sudo /opt/splunk/bin/splunk enable boot-start --accept-license --answer-yes --run-as-root
+   sudo /opt/splunk/bin/splunk status --run-as-root
+   sudo ss -tulpn | grep 8000
+
+now splunk forwarder installation in splunk server
+wget -O splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb "https://download.splunk.com/products/universalforwarder/releases/10.4.0/linux/splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb"
+sudo dpkg -i splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb
+
+sudo /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt --run-as-root
+
+
+
+
+
+   wget -O splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb "https://download.splunk.com/products/universalforwarder/releases/10.4.0/linux/splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb"
+   ls
+   sudo dpkg -i splunkforwarder-10.4.0-f798d4d49089-linux-amd64.deb 
+   sudo /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --run-as-root
+   
+   sudo /opt/splunkforwarder/bin/splunk add forward-server 172.31.12.7:9997
+   sudo /opt/splunkforwarder/bin/splunk add monitor /var/log
+   sudo /opt/splunkforwarder/bin/splunk add monitor /var/log/syslog
+   sudo /opt/splunkforwarder/bin/splunk add monitor /var/log/auth.log
+   sudo /opt/splunkforwarder/bin/splunk restart --run-as-root
+   sudo /opt/splunkforwarder/bin/splunk list forward-server
