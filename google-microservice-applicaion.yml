@@ -1,0 +1,61 @@
+trigger:
+- concise
+
+resources:
+- repo: self
+
+variables:
+  dockerRegistryServiceConnection: '316f279a-4e48-4d21-9ffc-b9a2f78824eb'
+  containerRegistry: 'ragini11acr.azurecr.io'
+  tag: '$(Build.BuildId)'
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and Push All Images
+
+  jobs:
+  - job: BuildAll
+    displayName: Build All Microservices
+
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+
+    - checkout: self
+
+    - task: Docker@2
+      displayName: Login to ACR
+      inputs:
+        command: login
+        containerRegistry: $(dockerRegistryServiceConnection)
+
+    - bash: |
+        echo "Searching Dockerfiles..."
+
+        find $(Build.SourcesDirectory)/src -name Dockerfile | while read dockerfile
+        do
+          SERVICE=$(basename $(dirname $(dirname "$dockerfile")))
+
+          # Dockerfile directly under service folder
+          if [ "$(basename $(dirname "$dockerfile"))" != "src" ]; then
+            SERVICE=$(basename $(dirname "$dockerfile"))
+          fi
+
+          echo "================================="
+          echo "Building Service: $SERVICE"
+          echo "Dockerfile: $dockerfile"
+          echo "================================="
+
+          docker build \
+            -f "$dockerfile" \
+            -t $(containerRegistry)/$SERVICE:$(Build.BuildId) \
+            -t $(containerRegistry)/$SERVICE:latest \
+            "$(dirname "$dockerfile")"
+
+          docker push $(containerRegistry)/$SERVICE:$(Build.BuildId)
+          docker push $(containerRegistry)/$SERVICE:latest
+
+        done
+      displayName: Build and Push All Services
